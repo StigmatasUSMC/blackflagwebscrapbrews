@@ -1,0 +1,70 @@
+from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import re
+import requests
+import time
+
+response = requests.get("http://www.blackflagbrewingco.com/")
+responsesc = response.status_code
+respcon = response.content
+
+if responsesc == 200:
+    print('Success!')
+elif responsesc == 404:
+    print('Not found!')
+
+soup_data = BeautifulSoup(response.text, 'html.parser')
+
+print("\n")
+beerlist = soup_data.find_all('td')
+
+d = beerlist[10::]
+
+filtered = [i for i in d if i == 'Glen']
+website = d
+
+website = ' '.join([str(elem) for elem in website])
+resultsub = re.sub(r"(\s?<td\s?c?l?a?s?s?\w+=.............\W)", '', website)
+# print(resultsub)
+
+a = resultsub
+a = list(a)
+listafterCLASStakenout = ''.join([str(elem) for elem in a])
+resultsub2 = re.sub(r"\s?(<?.?td>)", '', listafterCLASStakenout)
+# print(resultsub2)
+
+a = resultsub2
+a = list(a)
+listafterTDistakenout = ''.join([str(elem) for elem in a])
+secondfinalstringbeforeList = re.sub(
+    r"<\w+\s\w+\W+\w+\W+", '', listafterTDistakenout)
+# print(secondfinalstringbeforeList)
+
+a = secondfinalstringbeforeList
+a = list(a)
+listafterNUMSistakenout = ''.join([str(elem) for elem in a])
+finalstringbeforeList = re.sub(
+    r"\d+.\d?Z?", '', listafterNUMSistakenout)
+# print(finalstringbeforeList)
+
+
+listintostring = finalstringbeforeList.split('.')
+
+e = listintostring[0]
+f = listintostring[1]
+g = listintostring[2]
+h = listintostring[3]
+j = listintostring[4]
+k = listintostring[5]
+l = listintostring[6]
+m = listintostring[7]
+n = listintostring[8]
+o = listintostring[9]
+p = listintostring[10]
+
+print(
+    f"Here are the list of beers that are being server today for BlackFlag #1{e}\n,#2{f}\n,#3{g}\n,#4{h}\n,#5{j}\n,#6{k}\n,#7{l}\n,#8{m}\n,#9{n}\n,#10{o}\n,#11{p}\n")
